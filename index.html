@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Қыз Ұзату - Приглашение</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+<body>
+<audio id="notificationSound" src="music.mp3" autoplay></audio>
+<div class="video-background">
+<video autoplay loop muted playsinline id="myVideo" loading="lazy">
+<source src="main.mp4" type="video/mp4">Ваш браузер не поддерживает видео.
+</video>
+</div>
+<div class="container">
+<div class="content">
+<img src="image1.jpg" alt="Қыз Ұзату" class="main-image" loading="lazy">
+<img src="raz.png" alt="Декор" class="decor" loading="lazy">
+<img src="image2.jpg" alt="Қыз Ұзату" class="main-image" loading="lazy">
+<img src="SHRIFT.png" alt="Қыз Ұзату" class="sh-image" loading="lazy">
+<p>Аяулы қызымыз</p>
+<img src="Ulzhan.png" alt="Қыз Ұзату" class="Ulzhan" loading="lazy">
+<p>ата-анасының аялы алақанынан - құтты босағасына шығарып салу рәсіміне арналған салтанатты дастарханымыздың қадірлі қонағы болуға шақырамыз!</p>
+</div>
+</div>
+<img src="raz.png" alt="Декор" class="decor" loading="lazy">
+<img src="saltanat.png" alt="Қыз Ұзату" class="all" loading="lazy">
+<center><video autoplay width="350" loop="loop" loading="lazy"><source src="calendar.mp4" type="video/mp4"></video></center>
+<div class="countdown-container">
+<img src="deiin.png" alt="Қыз Ұзату" class="all" loading="lazy">
+<div class="countdown">
+<div class="time-box"><span id="days" class="time">00</span><p>Күн</p></div>
+<div class="time-box"><span id="hours" class="time">00</span><p>Сағат</p></div>
+<div class="time-box"><span id="minutes" class="time">00</span><p>Минут</p></div>
+<div class="time-box"><span id="seconds" class="time">00</span><p>Секунд</p></div>
+</div>
+</div>
+<img src="meken.png" alt="Қыз Ұзату" class="all" loading="lazy">
+<p>Қостанай қаласы</p>
+<p>Орджониеидзе 56А</p>
+<p>STATUS мейрамханасы</p>
+<div id="mainContent" margin-top= "10"></div>
+<div id="mapSection"><div id="map"></div></div>
+<img src="toi.png" alt="Қыз Ұзату" class="all" loading="lazy">
+<p>Ұлжалғас & Дулат</p>
+<img src="katysu.png" alt="Қыз Ұзату" class="text" loading="lazy">
+<form id="surveyForm" name="submit-to-google-sheet">
+<div class="form-group">
+<label for="name">Аты-жөніңіз:</label>
+<input type="text" id="name" name="name" required/>
+</div>
+<div class="form-group">
+<label>Тойға келесіз бе?</label>
+<div class="radio-group">
+<label><input type="radio" name="choice" value="Иә, әрине" required/>Иә, әрине</label>
+<label><input type="radio" name="choice" value="Жұбайыммен бірге келеміз"/>Жұбайыммен бірге келеміз</label>
+<label><input type="radio" name="choice" value="Жоқ, өкінішке орай"/>Жоқ, өкінішке орай</label>
+</div>
+</div>
+<button type="submit">Жіберу</button>
+</form>
+<div id="message" class="message"></div>
+<footer><p>Тойда кездескенше!</p></footer>
+<script>
+const scriptURL='https://script.google.com/macros/s/AKfycbzJ_NzJFERwJr_mdgrQCHDHLaEuHztM7AXtO3UWCHgle8lrveZFoQ29mIU2dmPnBdT4dQ/exec';
+const form=document.forms['submit-to-google-sheet'];
+const messageDiv=document.getElementById('message');
+form.addEventListener('submit',e=>{e.preventDefault();
+messageDiv.style.display='none';
+messageDiv.textContent='';
+messageDiv.className='message';
+fetch(scriptURL,{method:'POST',body:new FormData(form),mode:'cors'}).then(response=>{
+if(response.ok){
+messageDiv.textContent='Сіздің жауабыңыз қабылданды! Рақмет!';
+messageDiv.className='message success';
+messageDiv.style.display='block';form.reset();}else{throw new Error('Серверден қате жауап алынды.');}})
+.catch(error=>{console.error('Error!',error.message);
+messageDiv.textContent='Қате орын алды. Қайтадан көріңіз.';
+messageDiv.className='message error';
+messageDiv.style.display='block';});});
+function startCountdown(){
+const targetDate=new Date(2025,1,15,17,0,0).getTime();
+function updateCountdown(){
+const now=new Date().getTime();
+const timeLeft=targetDate-now;
+if(timeLeft>0){
+const days=Math.floor(timeLeft/(1000*60*60*24));
+const hours=Math.floor((timeLeft%(1000*60*60*24))/(1000*60*60));
+const minutes=Math.floor((timeLeft%(1000*60*60))/(1000*60));
+const seconds=Math.floor((timeLeft%(1000*60))/1000);
+document.getElementById('days').textContent=days<10?'0'+days:days;
+document.getElementById('hours').textContent=hours<10?'0'+hours:hours;
+document.getElementById('minutes').textContent=minutes<10?'0'+minutes:minutes;
+document.getElementById('seconds').textContent=seconds<10?'0'+seconds:seconds;
+}else{clearInterval(timer);
+document.querySelector('.countdown-container').innerHTML='<h1>Событие уже наступило!</h1>';}}
+const timer=setInterval(updateCountdown,1000);updateCountdown();}
+startCountdown();
+document.addEventListener("DOMContentLoaded",function(){
+document.getElementById("mainContent").style.display="none";
+document.getElementById("mapSection").style.display="block";
+var map=L.map('map').setView([53.234944,63.656031],16);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
+L.marker([53.234944,63.656031]).addTo(map).bindPopup('<b>Қостанай қаласы</b><br>Орджоникидзе 56А<br>"STATUS" мейрамханасы').openPopup();});
+</script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</body>
+</html>
