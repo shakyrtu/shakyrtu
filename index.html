@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
-<audio id="notificationSound" src="music.mp3" autoplay></audio>
+<audio autoplay id="notificationSound" src="music.mp3"></audio>
 <div class="video-background">
 <video autoplay loop muted playsinline id="myVideo" loading="lazy">
 <source src="main.mp4" type="video/mp4">Ваш браузер не поддерживает видео.
@@ -64,6 +64,10 @@
 <div id="message" class="message"></div>
 <footer><p>Тойда кездескенше!</p></footer>
 <script>
+  window.onload = function() {
+    var audio = document.getElementById("myAudio");
+    audio.play(); // Запускаем аудио
+  }
 const scriptURL='https://script.google.com/macros/s/AKfycbzJ_NzJFERwJr_mdgrQCHDHLaEuHztM7AXtO3UWCHgle8lrveZFoQ29mIU2dmPnBdT4dQ/exec';
 const form=document.forms['submit-to-google-sheet'];
 const messageDiv=document.getElementById('message');
